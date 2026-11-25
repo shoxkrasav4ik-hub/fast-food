@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="uz" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TezFood — Haqiqiy Olovli Fast Food!</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Russo One for bold headlines -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for crisp icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brandYellow: '#FFC72C',
+                        brandRed: '#DA291C',
+                        brandBlack: '#121212',
+                        brandDark: '#1E1E1E',
+                        brandWhite: '#FFFFFF',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Animations & Keyframes */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-16px) rotate(2deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(218, 41, 28, 0.7); }
+            50% { box-shadow: 0 0 0 14px rgba(218, 41, 28, 0); }
+        }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounceBadge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.25); }
+        }
+
+        .animate-float {
+            animation: floatSlow 4.5s ease-in-out infinite;
+        }
+
+        .animate-pulse-red {
+            animation: pulseGlow 2.2s infinite;
+        }
+
+        .animate-card-enter {
+            animation: slideUpFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .badge-pop {
+            animation: bounceBadge 0.35s ease-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FFC72C;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #DA291C;
+        }
+
+        /* Hide scrollbar for category horizontal scroll on mobile */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-white text-brandBlack font-sans antialiased selection:bg-brandYellow selection:text-brandBlack overflow-x-hidden">
+
+    <!-- ==================== STICKY HEADER ==================== -->
+    <header class="sticky top-0 z-40 bg-brandBlack/95 backdrop-blur-md text-white border-b-2 border-brandYellow shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4">
+                
+                <!-- Brand Logo -->
+                <a href="#asosiy" class="flex items-center gap-3 group shrink-0">
+                    <div class="w-11 h-11 rounded-2xl bg-brandRed flex items-center justify-center text-brandYellow text-2xl font-black shadow-lg group-hover:rotate-12 transition-transform duration-300">
+                        <i class="fa-solid fa-burger"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-tight text-white">TEZ<span class="text-brandYellow">FOOD</span></span>
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brandYellow/80 -mt-1">Olovli Ta'm</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center gap-8 font-bold text-sm uppercase tracking-wider">
+                    <a href="#asosiy" class="text-white hover:text-brandYellow transition-colors">Asosiy</a>
+                    <a href="#menyu" class="text-white hover:text-brandYellow transition-colors">Menyu</a>
+                    <a href="#aksiyalar" class="text-white hover:text-brandYellow transition-colors flex items-center gap-1.5">
+                        Aksiyalar <span class="bg-brandRed text-white text-[10px] px-2 py-0.5 rounded-full animate-pulse">HOT</span>
+                    </a>
+                    <a href="#aloqa" class="text-white hover:text-brandYellow transition-colors">Aloqa</a>
+                </nav>
+
+                <!-- Search Bar & Cart Button -->
+                <div class="flex items-center gap-3">
+                    <!-- Search Input (Hidden on very small screens, expandable or visible on sm+) -->
+                    <div class="relative hidden sm:block">
+                        <input type="text" id="searchInput" placeholder="Taom qidirish..." 
+                            class="bg-brandDark text-white placeholder-gray-400 text-sm rounded-full pl-10 pr-4 py-2.5 w-44 lg:w-64 border border-gray-700 focus:outline-none focus:border-brandYellow transition-all">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-brandYellow text-sm"></i>
+                    </div>
+
+                    <!-- Shopping Cart Button -->
+                    <button onclick="toggleCart(true)" class="relative bg-brandYellow hover:bg-yellow-400 text-brandBlack font-extrabold px-4 sm:px-5 py-2.5 rounded-full flex items-center gap-2.5 shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer">
+                        <i class="fa-solid fa-basket-shopping text-lg text-brandRed"></i>
+                        <span class="hidden sm:inline text-sm">Savat</span>
+                        <span id="cartBadge" class="bg-brandRed text-white text-xs font-black w-6 h-6 rounded-full flex items-center justify-center shadow">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button onclick="toggleMobileNav()" class="md:hidden text-white hover:text-brandYellow p-2 rounded-xl bg-brandDark">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Search & Nav Drawer -->
+            <div id="mobileNav" class="hidden md:hidden pb-4 pt-2 border-t border-gray-800 space-y-3">
+                <div class="relative">
+                    <input type="text" id="mobileSearchInput" placeholder="Burger, lavash, pitsa qidirish..." 
+                        class="w-full bg-brandDark text-white placeholder-gray-400 text-sm rounded-full pl-10 pr-4 py-2.5 border border-gray-700 focus:outline-none focus:border-brandYellow">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-brandYellow text-sm"></i>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-center font-bold text-sm">
+                    <a href="#asosiy" onclick="toggleMobileNav()" class="bg-brandDark py-2.5 rounded-xl hover:bg-brandYellow hover:text-brandBlack transition">Asosiy</a>
+                    <a href="#menyu" onclick="toggleMobileNav()" class="bg-brandDark py-2.5 rounded-xl hover:bg-brandYellow hover:text-brandBlack transition">Menyu</a>
+                    <a href="#aksiyalar" onclick="toggleMobileNav()" class="bg-brandDark py-2.5 rounded-xl hover:bg-brandYellow hover:text-brandBlack transition">Aksiyalar 🔥</a>
+                    <a href="#aloqa" onclick="toggleMobileNav()" class="bg-brandDark py-2.5 rounded-xl hover:bg-brandYellow hover:text-brandBlack transition">Aloqa</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="asosiy" class="relative bg-brandBlack text-white overflow-hidden pt-10 pb-20 lg:py-24">
+        <!-- Decorative Yellow & Red Background Blobs -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-brandRed/25 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 -left-24 w-96 h-96 bg-brandYellow/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Content -->
+                <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-brandDark border border-brandYellow/40 px-4 py-2 rounded-full text-brandYellow text-xs sm:text-sm font-bold uppercase tracking-wider">
+                        <span class="w-2.5 h-2.5 rounded-full bg-brandRed animate-ping"></span>
+                        Toshkent bo'ylab 30 daqiqada yetkazib beramiz!
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight">
+                        HAQIQIY <span class="text-brandYellow">OLOVLI</span> VA SHIRALI <span class="text-brandRed underline decoration-brandYellow decoration-4 underline-offset-8">FAST FOOD</span>
+                    </h1>
+
+                    <p class="text-gray-300 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        100% halol mol va tovuq go'shtidan tayyorlangan yangi burgerlar, tandir lavashlar, issiq pitsalar va qarsildoq kartoshka fri. Har bir luqmada unutilmas lazzat!
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#menyu" class="w-full sm:w-auto bg-brandRed hover:bg-red-700 text-white font-black text-base px-8 py-4 rounded-2xl shadow-xl animate-pulse-red flex items-center justify-center gap-3 transition-transform hover:scale-105">
+                            <span>Buyurtma berish</span>
+                            <i class="fa-solid fa-fire-flame-curved text-brandYellow"></i>
+                        </a>
+                        <a href="#aksiyalar" class="w-full sm:w-auto bg-brandYellow hover:bg-yellow-400 text-brandBlack font-black text-base px-8 py-4 rounded-2xl shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105">
+                            <span>Kombo Aksiyalar</span>
+                            <i class="fa-solid fa-percent"></i>
+                        </a>
+                    </div>
+
+                    <!-- Trust Badges / Stats -->
+                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-gray-800 max-w-lg mx-auto lg:mx-0">
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-black text-brandYellow">30 daq</div>
+                            <div class="text-xs text-gray-400 font-medium">Issiq yetkazish</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-black text-white">100%</div>
+                            <div class="text-xs text-gray-400 font-medium">Halol mahsulotlar</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-black text-brandRed">4.9 ★</div>
+                            <div class="text-xs text-gray-400 font-medium">15,000+ mijozlar</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Floating Hero Burger Visual -->
+                <div class="lg:col-span-6 relative flex justify-center">
+                    <div class="relative w-full max-w-md sm:max-w-lg">
+                        <!-- Yellow Circle Backdrop -->
+                        <div class="absolute inset-4 bg-gradient-to-tr from-brandRed via-brandYellow to-yellow-300 rounded-full opacity-90 blur-md animate-pulse"></div>
+                        
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=85" 
+                             onerror="this.src='https://placehold.co/600x600/121212/FFC72C?text=TezFood+Burger'"
+                             alt="Big Double Cheese Burger" 
+                             class="relative z-10 w-full h-80 sm:h-[430px] object-cover rounded-3xl border-4 border-brandYellow shadow-2xl animate-float">
+
+                        <!-- Floating Price Tag Badge -->
+                        <div class="absolute -bottom-5 -left-2 sm:-left-6 z-20 bg-white text-brandBlack p-4 rounded-2xl shadow-2xl border-2 border-brandBlack flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-brandRed text-white flex items-center justify-center font-black text-xl">
+                                -20%
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-gray-500 uppercase">Xit Taom</div>
+                                <div class="font-black text-base sm:text-lg">Double Fire Burger</div>
+                                <div class="text-brandRed font-black text-sm">42 000 so'm</div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Quality Badge -->
+                        <div class="absolute -top-4 -right-2 sm:-right-4 z-20 bg-brandYellow text-brandBlack px-4 py-2.5 rounded-2xl shadow-xl font-black text-xs sm:text-sm border-2 border-brandBlack rotate-6">
+                            🔥 Yangi pishirilgan!
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SPECIAL OFFERS / PROMO BANNER ==================== -->
+    <section id="aksiyalar" class="py-12 bg-brandYellow border-y-4 border-brandBlack">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-brandBlack rounded-3xl p-6 sm:p-10 text-white shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="space-y-4 text-center lg:text-left max-w-2xl relative z-10">
+                    <span class="inline-block bg-brandRed text-white text-xs font-black uppercase px-3.5 py-1.5 rounded-full tracking-wider">
+                        Kunlik Super Aksiya ⚡
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black">
+                        "DO'STLAR KOMBO" — <span class="text-brandYellow">25% CHEGIRMA!</span>
+                    </h2>
+                    <p class="text-gray-300 text-sm sm:text-base">
+                        2 ta Big Cheese Burger + 2 ta Katta Kartoshka Fri + 1L Coca-Cola + 2 xil maxsus sous. Do'stlar bilan mazali kecha uchun eng zo'r tanlov!
+                    </p>
+                    
+                    <!-- Countdown Timer -->
+                    <div class="flex items-center justify-center lg:justify-start gap-3 pt-1">
+                        <span class="text-xs uppercase font-bold text-brandYellow">Aksiya tugashiga:</span>
+                        <div class="flex gap-2 font-black text-brandBlack">
+                            <span id="timerHours" class="bg-brandYellow px-3 py-1.5 rounded-xl text-sm">04</span>
+                            <span class="text-brandYellow font-bold self-center">:</span>
+                            <span id="timerMinutes" class="bg-brandYellow px-3 py-1.5 rounded-xl text-sm">45</span>
+                            <span class="text-brandYellow font-bold self-center">:</span>
+                            <span id="timerSeconds" class="bg-brandYellow px-3 py-1.5 rounded-xl text-sm">19</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center gap-6 relative z-10">
+                    <div class="text-center sm:text-right">
+                        <div class="text-gray-400 line-through text-base font-bold">115 000 so'm</div>
+                        <div class="text-3xl sm:text-4xl font-black text-brandYellow">86 000 so'm</div>
+                    </div>
+                    <button onclick="addComboPromoToCart()" class="bg-brandRed hover:bg-red-700 text-white font-black px-7 py-4 rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap">
+                        <i class="fa-solid fa-cart-plus"></i>
+                        <span>Komboni olish</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== MENU SECTION ==================== -->
+    <section id="menyu" class="py-16 sm:py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Header -->
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-brandRed font-black uppercase tracking-widest text-xs sm:text-sm">Ishtaha ochar tanlov</span>
+                <h2 class="text-3xl sm:text-5xl font-black text-brandBlack mt-2">BIZNING <span class="bg-brandYellow px-3 py-0.5 rounded-xl">MENYU</span></h2>
+                <p class="text-gray-600 mt-3 text-sm sm:text-base">
+                    Har bir taomning tarkibi, vazni, kaloriyasi va narxi bilan batafsil tanishing.
+                </p>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div id="categoryTabs" class="flex items-center justify-start sm:justify-center gap-2.5 overflow-x-auto no-scrollbar pb-4 mb-8">
+                <!-- Populated dynamically via JS -->
+            </div>
+
+            <!-- Active Filter Info Bar -->
+            <div class="flex items-center justify-between mb-6 px-1">
+                <p class="text-sm font-bold text-gray-600">
+                    Ko'rsatilmoqda: <span id="itemsCount" class="text-brandBlack font-black">0</span> ta taom
+                </p>
+                <select id="sortSelect" onchange="renderMenu()" class="bg-white border-2 border-gray-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-bold text-brandBlack focus:outline-none focus:border-brandYellow cursor-pointer">
+                    <option value="default">Saralash: Mashhur</option>
+                    <option value="price-asc">Narx: Arzondan qimmatga</option>
+                    <option value="price-desc">Narx: Qimmatdan arzonga</option>
+                    <option value="calories-asc">Kaloriya: Kamdan ko'pga</option>
+                </select>
+            </div>
+
+            <!-- Menu Cards Grid -->
+            <div id="menuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-7">
+                <!-- Food Cards injected here -->
+            </div>
+
+            <!-- Empty Search Result State -->
+            <div id="emptyState" class="hidden text-center py-16 bg-white rounded-3xl border-2 border-dashed border-gray-300">
+                <div class="text-5xl mb-3">🍔🔍</div>
+                <h3 class="text-xl font-black text-brandBlack">Afsuski, bunday taom topilmadi</h3>
+                <p class="text-gray-500 text-sm mt-1">Boshqa so'z bilan qidirib ko'ring yoki barcha menyuni oching.</p>
+                <button onclick="resetFilters()" class="mt-4 bg-brandYellow text-brandBlack font-bold px-6 py-2.5 rounded-xl hover:bg-yellow-400 transition">
+                    Barcha taomlarni ko'rsatish
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== WHY CHOOSE US BANNER ==================== -->
+    <section class="py-14 bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-brandBlack text-white p-7 rounded-3xl flex items-start gap-4 border-b-4 border-brandYellow">
+                    <div class="w-14 h-14 rounded-2xl bg-brandYellow text-brandBlack flex items-center justify-center text-2xl shrink-0">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-lg">Ochiq Olovda Pishiriladi</h3>
+                        <p class="text-gray-400 text-sm mt-1">Kotletlarimiz faqat buyurtma tushgandan so'ng grilda shirali qilib pishiriladi.</p>
+                    </div>
+                </div>
+
+                <div class="bg-brandRed text-white p-7 rounded-3xl flex items-start gap-4 border-b-4 border-brandBlack">
+                    <div class="w-14 h-14 rounded-2xl bg-white text-brandRed flex items-center justify-center text-2xl shrink-0">
+                        <i class="fa-solid fa-motorcycle"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-lg">Tezkor Kuryerlar</h3>
+                        <p class="text-red-100 text-sm mt-1">Maxsus termo-sumkalarda taomingiz xuddi hozir pechdan chiqqandek issiq yetib boradi.</p>
+                    </div>
+                </div>
+
+                <div class="bg-brandYellow text-brandBlack p-7 rounded-3xl flex items-start gap-4 border-b-4 border-brandRed">
+                    <div class="w-14 h-14 rounded-2xl bg-brandBlack text-brandYellow flex items-center justify-center text-2xl shrink-0">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-lg">100% Halol va Tabiiy</h3>
+                        <p class="text-brandBlack/80 text-sm mt-1">Faqat sertifikatlangan halol go'sht va har kuni tongda keltiriladigan sarxil sabzavotlar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer id="aloqa" class="bg-brandBlack text-white pt-16 pb-8 border-t-4 border-brandYellow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-gray-800">
+                
+                <!-- Col 1: Brand -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-brandRed flex items-center justify-center text-brandYellow text-xl font-black">
+                            <i class="fa-solid fa-burger"></i>
+                        </div>
+                        <span class="text-2xl font-black">TEZ<span class="text-brandYellow">FOOD</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Toshkentdagi eng mazali va tezkor fast-food tarmog'i. Har kuni siz uchun mehr bilan tayyorlaymiz!
+                    </p>
+                    <div class="flex gap-3 pt-2">
+                        <a href="#aloqa" class="w-10 h-10 rounded-full bg-brandDark hover:bg-brandYellow hover:text-brandBlack flex items-center justify-center transition"><i class="fa-brands fa-telegram"></i></a>
+                        <a href="#aloqa" class="w-10 h-10 rounded-full bg-brandDark hover:bg-brandRed hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#aloqa" class="w-10 h-10 rounded-full bg-brandDark hover:bg-brandYellow hover:text-brandBlack flex items-center justify-center transition"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Filiallar -->
+                <div>
+                    <h4 class="text-brandYellow font-black uppercase tracking-wider text-sm mb-4">Filiallarimiz (Toshkent)</h4>
+                    <ul class="space-y-2.5 text-sm text-gray-300">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-location-dot text-brandRed mt-1"></i> Chilonzor tumani, 19-kvartal, 14-uy</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-location-dot text-brandRed mt-1"></i> Yunusobod tumani, Amir Temur ko'chasi, 88</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-location-dot text-brandRed mt-1"></i> Shayxontohur, Samarqand Darvoza yonida</li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Ish vaqti -->
+                <div>
+                    <h4 class="text-brandYellow font-black uppercase tracking-wider text-sm mb-4">Ish Vaqtimiz</h4>
+                    <ul class="space-y-2.5 text-sm text-gray-300">
+                        <li class="flex justify-between"><span>Dushanba - Juma:</span> <span class="font-bold text-white">09:00 – 03:00</span></li>
+                        <li class="flex justify-between"><span>Shanba - Yakshanba:</span> <span class="font-bold text-brandYellow">24 Soat (Tunu-kun)</span></li>
+                        <li class="pt-2 text-xs text-gray-400">* 100 000 so'mdan yuqori buyurtmalarga yetkazib berish BEPUL!</li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Call Center -->
+                <div>
+                    <h4 class="text-brandYellow font-black uppercase tracking-wider text-sm mb-4">Aloqa Markazi</h4>
+                    <a href="tel:+998712000000" class="text-2xl sm:text-3xl font-black text-white hover:text-brandYellow transition block">
+                        +998 71 200-77-77
+                    </a>
+                    <p class="text-xs text-gray-400 mt-1">Qisqa raqam: <span class="text-brandYellow font-bold">1177</span></p>
+                    <button onclick="toggleCart(true)" class="mt-4 w-full bg-brandRed hover:bg-red-700 text-white font-bold py-3 rounded-xl text-sm transition cursor-pointer">
+                        Onlayn buyurtma berish
+                    </button>
+                </div>
+
+            </div>
+            <div class="pt-6 text-center text-xs text-gray-500">
+                © 2026 TezFood Uzbekistan. Barcha huquqlar himoyalangan.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== FOOD DETAILS MODAL ("Batafsil ma'lumot") ==================== -->
+    <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="bg-white text-brandBlack rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border-2 border-brandYellow animate-card-enter relative max-h-[90vh] flex flex-col">
+            
+            <!-- Close Button -->
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-brandBlack/80 hover:bg-brandRed text-white flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="overflow-y-auto">
+                <!-- Top Image -->
+                <div class="relative h-60 sm:h-72 bg-brandBlack">
+                    <img id="modalImg" src="" alt="" class="w-full h-full object-cover">
+                    <span id="modalBadge" class="absolute top-4 left-4 bg-brandRed text-white text-xs font-black px-3.5 py-1.5 rounded-full uppercase shadow-lg"></span>
+                </div>
+
+                <!-- Content Body -->
+                <div class="p-6 sm:p-8 space-y-5">
+                    <div class="flex flex-wrap items-start justify-between gap-2">
+                        <div>
+                            <span id="modalCategory" class="text-xs font-extrabold uppercase tracking-wider text-brandRed"></span>
+                            <h3 id="modalTitle" class="text-2xl sm:text-3xl font-black text-brandBlack mt-0.5"></h3>
+                        </div>
+                        <div class="text-right">
+                            <div id="modalPrice" class="text-2xl sm:text-3xl font-black text-brandRed"></div>
+                            <div id="modalWeight" class="text-xs font-bold text-gray-500"></div>
+                        </div>
+                    </div>
+
+                    <p id="modalDesc" class="text-gray-600 text-sm sm:text-base leading-relaxed"></p>
+
+                    <!-- Nutritional Info Grid -->
+                    <div class="grid grid-cols-4 gap-2 sm:gap-3 bg-gray-100 p-3.5 rounded-2xl text-center border border-gray-200">
+                        <div>
+                            <div id="modalCalories" class="font-black text-brandBlack text-sm sm:text-base"></div>
+                            <div class="text-[11px] text-gray-500 font-semibold">Kaloriya</div>
+                        </div>
+                        <div>
+                            <div id="modalProtein" class="font-black text-brandBlack text-sm sm:text-base"></div>
+                            <div class="text-[11px] text-gray-500 font-semibold">Oqsillar</div>
+                        </div>
+                        <div>
+                            <div id="modalFat" class="font-black text-brandBlack text-sm sm:text-base"></div>
+                            <div class="text-[11px] text-gray-500 font-semibold">Yog'lar</div>
+                        </div>
+                        <div>
+                            <div id="modalCarbs" class="font-black text-brandBlack text-sm sm:text-base"></div>
+                            <div class="text-[11px] text-gray-500 font-semibold">Uglevodlar</div>
+                        </div>
+                    </div>
+
+                    <!-- Full Ingredients List -->
+                    <div>
+                        <h4 class="font-black text-sm uppercase tracking-wider text-brandBlack mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-brandRed"></i> Tarkibi (Ingredients):
+                        </h4>
+                        <div id="modalIngredients" class="flex flex-wrap gap-2">
+                            <!-- Ingredient pills -->
+                        </div>
+                    </div>
+
+                    <!-- Size / Portion Selector -->
+                    <div id="modalSizeSection">
+                        <h4 class="font-black text-sm uppercase tracking-wider text-brandBlack mb-2">Hajmni tanlang:</h4>
+                        <div class="grid grid-cols-2 gap-3" id="modalSizeButtons">
+                            <!-- Size options -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer Action -->
+            <div class="p-4 sm:p-6 bg-gray-50 border-t border-gray-200 flex items-center justify-between gap-4">
+                <div class="flex items-center bg-white border-2 border-gray-200 rounded-xl overflow-hidden">
+                    <button onclick="changeModalQty(-1)" class="px-4 py-2.5 font-black text-lg hover:bg-brandYellow transition cursor-pointer">-</button>
+                    <span id="modalQty" class="px-4 font-black text-base">1</span>
+                    <button onclick="changeModalQty(1)" class="px-4 py-2.5 font-black text-lg hover:bg-brandYellow transition cursor-pointer">+</button>
+                </div>
+
+                <button id="modalAddBtn" class="flex-1 bg-brandRed hover:bg-red-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                    <span>Savatga qo'shish</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==================== SLIDE-OVER SHOPPING CART DRAWER ==================== -->
+    <div id="cartOverlay" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-xs transition-opacity" onclick="toggleCart(false)"></div>
+    
+    <aside id="cartDrawer" class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-white text-brandBlack shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        
+        <!-- Cart Header -->
+        <div class="p-5 bg-brandBlack text-white flex items-center justify-between border-b-4 border-brandYellow">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-basket-shopping text-brandYellow text-xl"></i>
+                <h3 class="text-xl font-black">Sizning Savatingiz</h3>
+            </div>
+            <button onclick="toggleCart(false)" class="w-9 h-9 rounded-full bg-brandDark hover:bg-brandRed text-white flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items Container -->
+        <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-5 space-y-4">
+            <!-- Cart items injected via JS -->
+        </div>
+
+        <!-- Checkout Form & Summary Footer -->
+        <div id="cartFooter" class="p-5 bg-gray-50 border-t-2 border-gray-200 space-y-4">
+            <!-- Delivery Inputs -->
+            <div class="space-y-2.5">
+                <input type="text" id="customerName" placeholder="Ismingiz (masalan: Azizbek)" 
+                    class="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:outline-none focus:border-brandRed">
+                <input type="tel" id="customerPhone" placeholder="Telefon: +998 90 123-45-67" 
+                    class="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:outline-none focus:border-brandRed">
+                <input type="text" id="customerAddress" placeholder="Yetkazish manzili (tuman, ko'cha, uy)" 
+                    class="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:outline-none focus:border-brandRed">
+            </div>
+
+            <!-- Totals -->
+            <div class="space-y-1.5 text-sm border-t border-gray-200 pt-3">
+                <div class="flex justify-between text-gray-600">
+                    <span>Taomlar narxi:</span>
+                    <span id="cartSubtotal" class="font-bold text-brandBlack">0 so'm</span>
+                </div>
+                <div class="flex justify-between text-gray-600">
+                    <span>Yetkazib berish:</span>
+                    <span id="cartDelivery" class="font-bold text-green-600">15 000 so'm</span>
+                </div>
+                <div class="flex justify-between text-lg font-black text-brandBlack pt-1">
+                    <span>Jami to'lov:</span>
+                    <span id="cartTotal" class="text-brandRed">0 so'm</span>
+                </div>
+            </div>
+
+            <button onclick="submitOrder()" class="w-full bg-brandRed hover:bg-red-700 text-white font-black py-4 rounded-2xl shadow-lg hover:scale-[1.01] active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                <span>Buyurtmani tasdiqlash</span>
+                <i class="fa-solid fa-circle-check text-brandYellow"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ==================== ORDER CONFIRMATION MODAL ==================== -->
+    <div id="orderSuccessModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center space-y-5 border-4 border-brandYellow shadow-2xl animate-card-enter">
+            <div class="w-20 h-20 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-4xl mx-auto shadow-inner">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-black text-brandBlack">Buyurtmangiz Qabul Qilindi! 🎉</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+                Rahmat, <span id="confirmName" class="font-bold text-brandBlack"></span>! Oshpazlarimiz taomingizni tayyorlashni boshlashdi. Kuryer <span class="text-brandRed font-bold">30 daqiqa</span> ichida yetib boradi.
+            </p>
+            <div class="bg-brandYellow/20 border border-brandYellow rounded-2xl p-3 text-xs font-bold text-brandBlack">
+                Buyurtma raqami: <span id="orderNumber" class="text-brandRed font-black">#TF-8492</span>
+            </div>
+            <button onclick="closeOrderSuccess()" class="w-full bg-brandBlack hover:bg-brandDark text-brandYellow font-black py-3.5 rounded-2xl transition cursor-pointer">
+                Ajoyib, rahmat!
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== TOAST NOTIFICATION ==================== -->
+    <div id="toastContainer" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col gap-2 w-max max-w-[92vw]"></div>
+
+    <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
+    <script>
+        // 1. COMPLETE FAST FOOD MENU DATA (Authentic Uzbek descriptions, real Unsplash photos, full nutrition & pricing)
+        const menuItems = [
+            {
+                id: 1,
+                name: "Big Double Fire Burger",
+                category: "Burgerlar",
+                badge: "XIT 🔥",
+                price: 42000,
+                largePrice: 54000,
+                weight: "360 g",
+                prepTime: "12 daq",
+                calories: "740 kkal",
+                protein: "42 g",
+                fat: "38 g",
+                carbs: "54 g",
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Ikkita shirali mol go'shti kotleti, eritilgan Chedder pishlog'i va olovli maxsus sous.",
+                fullDesc: "Ochiq olovda pishirilgan ikkita 100% halol mol go'shti kotleti, ikki qavat haqiqiy Chedder pishlog'i, qarsildoq aysberg salati, yangi pomidor, tuzlangan bodring va maxsus achchiq-shirin Fire sousi.",
+                ingredients: ["Kunjutli bulochka", "2x Mol go'shti kotleti", "2x Chedder pishlog'i", "Aysberg salati", "Pomidor", "Tuzlangan bodring", "Maxsus Fire sous"]
+            },
+            {
+                id: 2,
+                name: "Classic Cheese Burger",
+                category: "Burgerlar",
+                badge: "MASHHUR",
+                price: 29000,
+                largePrice: 38000,
+                weight: "240 g",
+                prepTime: "10 daq",
+                calories: "510 kkal",
+                protein: "28 g",
+                fat: "24 g",
+                carbs: "44 g",
+                image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Klassik yumshoq bulochka, mol go'shti kotleti, Chedder pishlog'i va xantal sousi.",
+                fullDesc: "Har bir mijozning sevimli klassikasi: yumshoq qovurilgan bulochka ichida shirali mol go'shti, eritilgan pishloq, qizil piyoz halqalari va klassik burger sousi.",
+                ingredients: ["Yumshoq bulochka", "Mol go'shti kotleti", "Chedder pishlog'i", "Qizil piyoz", "Tuzlangan bodring", "Ketchup va Xantal"]
+            },
+            {
+                id: 3,
+                name: "Crispy Chicken Burger",
+                category: "Burgerlar",
+                badge: "QARSILDOQ",
+                price: 32000,
+                largePrice: 41000,
+                weight: "270 g",
+                prepTime: "11 daq",
+                calories: "560 kkal",
+                protein: "31 g",
+                fat: "26 g",
+                carbs: "49 g",
+                image: "https://images.unsplash.com/photo-1615297928064-24977384d0da?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Maxsus ziravorlarda qovurilgan qarsildoq tovuq filesi va sarimsoqli sous.",
+                fullDesc: "Tashqi tomoni oltinrang qarsildoq, ichi esa nihoyatda yumshoq tovuq ko'krak filesi, yangi salat bargi va qaymoqli-sarimsoqli sous bilan.",
+                ingredients: ["Briosh bulochka", "Qarsildoq tovuq filesi", "Aysberg salati", "Pomidor", "Qaymoqli-sarimsoqli sous"]
+            },
+            {
+                id: 4,
+                name: "Tandir Mol Go'shtli Lavash",
+                category: "Lavash va Shaurma",
+                badge: "MILLIY XIT",
+                price: 34000,
+                largePrice: 42000,
+                weight: "380 g",
+                prepTime: "8 daq",
+                calories: "640 kkal",
+                protein: "36 g",
+                fat: "25 g",
+                carbs: "66 g",
+                image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Yupqa tandir xamirida qovurilgan mol go'shti, chipslar, pomidor va oq sous.",
+                fullDesc: "Maxsus retsept asosida pishirilgan yupqa lavash xamiri, shirali qovurilgan mol go'shti bo'laklari, qarsildoq kartoshka chipslari, yangi pomidor, bodring va o'zimizning firmenniy oq sousimiz.",
+                ingredients: ["Tandir lavash xamiri", "Mol go'shti (halol)", "Pomidor va bodring", "Kartoshka chipslari", "Firmenniy oq sous", "Tomat sousi"]
+            },
+            {
+                id: 5,
+                name: "Pishloqli Tovuq Shaurma",
+                category: "Lavash va Shaurma",
+                badge: "YANGI",
+                price: 31000,
+                largePrice: 39000,
+                weight: "350 g",
+                prepTime: "8 daq",
+                calories: "590 kkal",
+                protein: "33 g",
+                fat: "22 g",
+                carbs: "62 g",
+                image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Grilda pishgan tovuq go'shti, ikki xil pishloq va marinadlangan bodring.",
+                fullDesc: "Grilda xushbo'y qilib pishirilgan tovuq go'shti, cho'ziluvchan Motsarella va Chedder pishloqlari, yangi sabzavotlar hamda maxsus sharqona sous.",
+                ingredients: ["Issiq pita/lavash noni", "Gril tovuq go'shti", "Motsarella pishlog'i", "Tuzlangan bodring", "Pomidor", "Sharqona sous"]
+            },
+            {
+                id: 6,
+                name: "Pepperoni Olovli Pitsa (33 sm)",
+                category: "Pitsa",
+                badge: "TOP PITSA",
+                price: 75000,
+                largePrice: 95000,
+                weight: "680 g",
+                prepTime: "18 daq",
+                calories: "1420 kkal",
+                protein: "64 g",
+                fat: "58 g",
+                carbs: "155 g",
+                image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Halol dudlangan pepperoni kolbasasi, ko'p Motsarella pishlog'i va italyan sousi.",
+                fullDesc: "Yupqa va chetlari qarsildoq xamir ustida maxsus italyan pomidor sousi, cho'ziluvchan Motsarella pishlog'i va biroz achchiq halol pepperoni bo'laklari.",
+                ingredients: ["Italyancha xamir", "Motsarella pishlog'i", "Halol Pepperoni", "Pomidor sousi", "Oregano ziravori"]
+            },
+            {
+                id: 7,
+                name: "To'rt Pishloqli & Go'shtli Pitsa",
+                category: "Pitsa",
+                badge: "OILAVIY",
+                price: 82000,
+                largePrice: 105000,
+                weight: "740 g",
+                prepTime: "20 daq",
+                calories: "1560 kkal",
+                protein: "72 g",
+                fat: "66 g",
+                carbs: "160 g",
+                image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Mol go'shti, tovuq filesi, qo'ziqorin va Motsarella pishlog'i uyg'unligi.",
+                fullDesc: "Haqiqiy go'shtsevarlar uchun: qovurilgan mol go'shti, dudlangan tovuq, yangi shampinyon qo'ziqorinlari, zaytun va mo'l-ko'l pishloq.",
+                ingredients: ["Pitsa xamiri", "Mol go'shti", "Dudlangan tovuq", "Shampinyon qo'ziqorin", "Motsarella", "Qora zaytun"]
+            },
+            {
+                id: 8,
+                name: "Oltinrang Kartoshka Fri",
+                category: "Fri va Gazaklar",
+                badge: "QARSILDOQ",
+                price: 16000,
+                largePrice: 22000,
+                weight: "150 g",
+                prepTime: "5 daq",
+                calories: "380 kkal",
+                protein: "5 g",
+                fat: "18 g",
+                carbs: "48 g",
+                image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Tashqarisi qarsildoq, ichi yumshoq qovurilgan sara kartoshka qalamchalari.",
+                fullDesc: "Eng sara navli kartoshkadan tayyorlangan, dengiz tuzi sepilgan issiq va qarsildoq kartoshka fri. Ketchup yoki pishloqli sous bilan ajoyib ketadi.",
+                ingredients: ["Sara kartoshka", "O'simlik yog'i", "Mayda dengiz tuzi"]
+            },
+            {
+                id: 9,
+                name: "Tovuq Naggetslari (9 dona)",
+                category: "Fri va Gazaklar",
+                badge: "BOLALAR SEVIMLISI",
+                price: 24000,
+                largePrice: 34000,
+                weight: "200 g",
+                prepTime: "7 daq",
+                calories: "440 kkal",
+                protein: "26 g",
+                fat: "22 g",
+                carbs: "32 g",
+                image: "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "100% tovuq ko'krak go'shtidan tayyorlangan oltinrang naggetslar.",
+                fullDesc: "Mayin tovuq filesidan tayyorlanib, maxsus qarsildoq qobiqda qovurilgan 9 dona issiq naggetslar.",
+                ingredients: ["Tovuq ko'krak filesi", "Qarsildoq non talqoni", "Tabiiy ziravorlar"]
+            },
+            {
+                id: 10,
+                name: "KFC Style Achchiq Qanotchalar",
+                category: "Fri va Gazaklar",
+                badge: "ACHCHIQ 🌶️",
+                price: 33000,
+                largePrice: 48000,
+                weight: "280 g",
+                prepTime: "10 daq",
+                calories: "610 kkal",
+                protein: "34 g",
+                fat: "36 g",
+                carbs: "35 g",
+                image: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Maxsus achchiq marinadda pishirilgan qarsildoq tovuq qanotchalari (7 dona).",
+                fullDesc: "Achchiq ta'm ishqibozlari uchun maxsus ziravorlar aralashmasida marinadlangan va qarsildoq qilib qovurilgan tovuq qanotchalari.",
+                ingredients: ["Tovuq qanotchalari", "Qizil achchiq qalampir", "Paprika", "Qarsildoq qoplama"]
+            },
+            {
+                id: 11,
+                name: "Muzdek Coca-Cola (0.5 L)",
+                category: "Ichimliklar",
+                badge: "MUZDEK ❄️",
+                price: 9000,
+                largePrice: 14000,
+                weight: "500 ml",
+                prepTime: "1 daq",
+                calories: "210 kkal",
+                protein: "0 g",
+                fat: "0 g",
+                carbs: "53 g",
+                image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Fast-food bilan eng zo'r ketadigan salqin va tetiklashtiruvchi Coca-Cola.",
+                fullDesc: "Muzlatgichdan yangi olingan, tetiklashtiruvchi gazlangan Coca-Cola ichimligi (0.5L yoki 1.5L hajmda).",
+                ingredients: ["Gazlangan suv", "Shakar", "Tabiiy aromatizatorlar"]
+            },
+            {
+                id: 12,
+                name: "Yangi Siqilgan Limonad & Moxito",
+                category: "Ichimliklar",
+                badge: "TABIIY",
+                price: 18000,
+                largePrice: 25000,
+                weight: "400 ml",
+                prepTime: "3 daq",
+                calories: "120 kkal",
+                protein: "0 g",
+                fat: "0 g",
+                carbs: "28 g",
+                image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Yangi yalpiz barglari, laym, limon va muz bo'laklari bilan salqin moxito.",
+                fullDesc: "Issiq kunda yoki achchiq burgerlardan so'ng chanqoqni bosuvchi yangi yalpiz va sitrus mevalardan tayyorlangan alkogolsiz moxito.",
+                ingredients: ["Yangi yalpiz", "Laym va limon", "Muz bo'laklari", "Gazlangan suv", "Qamish shakari"]
+            },
+            {
+                id: 13,
+                name: "TezFood Mega Kombo",
+                category: "Kombo",
+                badge: "TEJAMKOR 💰",
+                price: 55000,
+                largePrice: 68000,
+                weight: "650 g",
+                prepTime: "12 daq",
+                calories: "1180 kkal",
+                protein: "46 g",
+                fat: "52 g",
+                carbs: "125 g",
+                image: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "Double Fire Burger + O'rta Kartoshka Fri + Coca-Cola 0.5L + Pishloqli sous.",
+                fullDesc: "Bir kishi uchun to'yimli va hamyonbop to'plam: katta ikki qavatli burger, issiq kartoshka fri, pishloqli sous va salqin Coca-Cola.",
+                ingredients: ["Big Double Fire Burger", "Kartoshka Fri", "Coca-Cola 0.5L", "Pishloqli sous"]
+            },
+            {
+                id: 14,
+                name: "Do'stlar Kombo (2 kishilik)",
+                category: "Kombo",
+                badge: "-25% AKSIYA",
+                price: 86000,
+                largePrice: 110000,
+                weight: "1150 g",
+                prepTime: "15 daq",
+                calories: "2150 kkal",
+                protein: "88 g",
+                fat: "94 g",
+                carbs: "220 g",
+                image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80",
+                shortDesc: "2x Cheese Burger + 2x Katta Fri + 6x Naggets + 1L Coca-Cola + 2x Sous.",
+                fullDesc: "Ikki kishi yoki yaqin do'stlar uchun maxsus chegirmali katta set. Hamma narsa bor va alohida sotib olishdan 25% arzon!",
+                ingredients: ["2x Classic Cheese Burger", "2x Kartoshka Fri", "6 dona Tovuq Naggets", "1L Coca-Cola", "2 xil sous"]
+            }
+        ];
+
+        const categories = ["Barchasi", "Burgerlar", "Lavash va Shaurma", "Pitsa", "Fri va Gazaklar", "Ichimliklar", "Kombo"];
+
+        // Application State
+        let activeCategory = "Barchasi";
+        let searchQuery = "";
+        let cart = [];
+        let currentModalItem = null;
+        let currentModalSize = "Standart";
+        let currentModalQty = 1;
+
+        // Format currency in Uzbek Som
+        function formatPrice(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " so'm";
+        }
+
+        // 2. RENDER CATEGORY TABS
+        function renderCategories() {
+            const container = document.getElementById("categoryTabs");
+            container.innerHTML = categories.map(cat => {
+                const isActive = cat === activeCategory;
+                return `
+                    <button onclick="selectCategory('${cat}')" 
+                        class="px-5 py-2.5 rounded-2xl font-extrabold text-sm whitespace-nowrap transition-all cursor-pointer border-2 ${
+                            isActive 
+                            ? 'bg-brandBlack text-brandYellow border-brandBlack shadow-lg scale-105' 
+                            : 'bg-white text-brandBlack border-gray-200 hover:border-brandYellow hover:bg-brandYellow/10'
+                        }">
+                        ${cat}
+                    </button>
+                `;
+            }).join("");
+        }
+
+        function selectCategory(cat) {
+            activeCategory = cat;
+            renderCategories();
+            renderMenu();
+        }
+
+        // 3. RENDER MENU CARDS
+        function renderMenu() {
+            const grid = document.getElementById("menuGrid");
+            const emptyState = document.getElementById("emptyState");
+            const sortBy = document.getElementById("sortSelect").value;
+
+            let filtered = menuItems.filter(item => {
+                const matchesCat = activeCategory === "Barchasi" || item.category === activeCategory;
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      item.shortDesc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      item.ingredients.some(ing => ing.toLowerCase().includes(searchQuery.toLowerCase()));
+                return matchesCat && matchesSearch;
+            });
+
+            // Sorting
+            if (sortBy === "price-asc") filtered.sort((a, b) => a.price - b.price);
+            if (sortBy === "price-desc") filtered.sort((a, b) => b.price - a.price);
+            if (sortBy === "calories-asc") filtered.sort((a, b) => parseInt(a.calories) - parseInt(b.calories));
+
+            document.getElementById("itemsCount").textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = "";
+                emptyState.classList.remove("hidden");
+                return;
+            }
+
+            emptyState.classList.add("hidden");
+            grid.innerHTML = filtered.map((item, idx) => `
+                <div style="animation-delay: ${idx * 40}ms" 
+                     class="bg-white rounded-3xl overflow-hidden border-2 border-gray-100 hover:border-brandYellow shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group animate-card-enter">
+                    
+                    <div>
+                        <!-- Food Photo Wrapper -->
+                        <div class="relative h-52 bg-brandBlack overflow-hidden cursor-pointer" onclick="openDetailModal(${item.id})">
+                            <img src="${item.image}" 
+                                 onerror="this.src='https://placehold.co/600x400/121212/FFC72C?text=${encodeURIComponent(item.name)}'"
+                                 alt="${item.name}" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            
+                            <!-- Top Badge -->
+                            <span class="absolute top-3 left-3 bg-brandRed text-white text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wide shadow">
+                                ${item.badge}
+                            </span>
+
+                            <!-- Prep time pill -->
+                            <span class="absolute bottom-3 right-3 bg-brandBlack/85 backdrop-blur-xs text-brandYellow text-xs font-bold px-2.5 py-1 rounded-xl flex items-center gap-1">
+                                <i class="fa-regular fa-clock"></i> ${item.prepTime}
+                            </span>
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="p-5 pb-3">
+                            <div class="flex items-center justify-between text-xs font-bold text-gray-400 mb-1">
+                                <span>${item.category}</span>
+                                <span>${item.weight} • ${item.calories}</span>
+                            </div>
+                            <h3 onclick="openDetailModal(${item.id})" class="text-lg font-black text-brandBlack group-hover:text-brandRed transition-colors cursor-pointer line-clamp-1">
+                                ${item.name}
+                            </h3>
+                            <p class="text-gray-500 text-xs sm:text-sm mt-1.5 line-clamp-2 leading-relaxed">
+                                ${item.shortDesc}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer: Price + Info + Add to Cart -->
+                    <div class="p-5 pt-2 space-y-3">
+                        <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+                            <div>
+                                <span class="text-[11px] text-gray-400 block font-semibold">Narxi:</span>
+                                <span class="text-xl font-black text-brandBlack">${formatPrice(item.price)}</span>
+                            </div>
+                            <button onclick="openDetailModal(${item.id})" 
+                                class="text-xs font-extrabold text-brandBlack bg-gray-100 hover:bg-brandYellow px-3 py-2 rounded-xl transition cursor-pointer flex items-center gap-1">
+                                <i class="fa-solid fa-circle-info text-brandRed"></i> Batafsil
+                            </button>
+                        </div>
+
+                        <button onclick="addToCart(${item.id}, 'Standart', 1)" 
+                            class="w-full bg-brandYellow hover:bg-brandRed text-brandBlack hover:text-white font-black py-3 rounded-2xl transition-colors duration-200 flex items-center justify-center gap-2 shadow-sm cursor-pointer">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Savatga qo'shish</span>
+                        </button>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function resetFilters() {
+            activeCategory = "Barchasi";
+            searchQuery = "";
+            document.getElementById("searchInput").value = "";
+            document.getElementById("mobileSearchInput").value = "";
+            renderCategories();
+            renderMenu();
+        }
+
+        // 4. FOOD DETAILS MODAL LOGIC
+        function openDetailModal(id) {
+            const item = menuItems.find(i => i.id === id);
+            if (!item) return;
+
+            currentModalItem = item;
+            currentModalSize = "Standart";
+            currentModalQty = 1;
+
+            document.getElementById("modalImg").src = item.image;
+            document.getElementById("modalBadge").textContent = item.badge;
+            document.getElementById("modalCategory").textContent = item.category;
+            document.getElementById("modalTitle").textContent = item.name;
+            document.getElementById("modalWeight").textContent = `Vazni: ${item.weight} • Tayyorlanish: ${item.prepTime}`;
+            document.getElementById("modalDesc").textContent = item.fullDesc;
+
+            // Nutrition
+            document.getElementById("modalCalories").textContent = item.calories;
+            document.getElementById("modalProtein").textContent = item.protein;
+            document.getElementById("modalFat").textContent = item.fat;
+            document.getElementById("modalCarbs").textContent = item.carbs;
+
+            // Ingredients
+            document.getElementById("modalIngredients").innerHTML = item.ingredients.map(ing => `
+                <span class="bg-brandYellow/20 border border-brandYellow text-brandBlack text-xs font-bold px-3 py-1 rounded-full">
+                    ✓ ${ing}
+                </span>
+            `).join("");
+
+            updateModalPricingAndSizes();
+
+            const modal = document.getElementById("detailModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function updateModalPricingAndSizes() {
+            const item = currentModalItem;
+            const unitPrice = currentModalSize === "Katta (XL)" ? item.largePrice : item.price;
+            document.getElementById("modalPrice").textContent = formatPrice(unitPrice * currentModalQty);
+            document.getElementById("modalQty").textContent = currentModalQty;
+
+            const sizes = [
+                { label: "Standart", price: item.price },
+                { label: "Katta (XL)", price: item.largePrice }
+            ];
+
+            document.getElementById("modalSizeButtons").innerHTML = sizes.map(s => {
+                const active = s.label === currentModalSize;
+                return `
+                    <button onclick="selectModalSize('${s.label}')" 
+                        class="p-3 rounded-2xl border-2 text-left transition cursor-pointer ${
+                            active ? 'border-brandRed bg-red-50' : 'border-gray-200 hover:border-brandYellow'
+                        }">
+                        <div class="font-black text-sm text-brandBlack">${s.label}</div>
+                        <div class="text-xs font-bold text-brandRed">${formatPrice(s.price)}</div>
+                    </button>
+                `;
+            }).join("");
+
+            document.getElementById("modalAddBtn").onclick = () => {
+                addToCart(item.id, currentModalSize, currentModalQty);
+                closeDetailModal();
+            };
+        }
+
+        function selectModalSize(size) {
+            currentModalSize = size;
+            updateModalPricingAndSizes();
+        }
+
+        function changeModalQty(delta) {
+            currentModalQty = Math.max(1, currentModalQty + delta);
+            updateModalPricingAndSizes();
+        }
+
+        function closeDetailModal() {
+            const modal = document.getElementById("detailModal");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+
+        // 5. SHOPPING CART LOGIC
+        function addToCart(id, size = "Standart", qty = 1) {
+            const item = menuItems.find(i => i.id === id);
+            if (!item) return;
+
+            const price = size === "Katta (XL)" ? item.largePrice : item.price;
+            const cartKey = `${id}-${size}`;
+            const existing = cart.find(c => c.key === cartKey);
+
+            if (existing) {
+                existing.qty += qty;
+            } else {
+                cart.push({
+                    key: cartKey,
+                    id: item.id,
+                    name: item.name,
+                    size: size,
+                    price: price,
+                    image: item.image,
+                    qty: qty
+                });
+            }
+
+            updateCartUI();
+            showToast(`"${item.name}" (${size}) savatga qo'shildi!`);
+        }
+
+        function addComboPromoToCart() {
+            addToCart(14, "Standart", 1);
+            toggleCart(true);
+        }
+
+        function updateCartItemQty(key, delta) {
+            const index = cart.findIndex(c => c.key === key);
+            if (index === -1) return;
+
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function removeCartItem(key) {
+            cart = cart.filter(c => c.key !== key);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            const badge = document.getElementById("cartBadge");
+            badge.textContent = totalCount;
+            badge.classList.remove("badge-pop");
+            void badge.offsetWidth; // trigger reflow
+            badge.classList.add("badge-pop");
+
+            const container = document.getElementById("cartItemsContainer");
+            const footer = document.getElementById("cartFooter");
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-center py-12">
+                        <div class="w-24 h-24 rounded-full bg-brandYellow/20 flex items-center justify-center text-5xl mb-4">
+                            🍔
+                        </div>
+                        <h4 class="text-xl font-black text-brandBlack">Savatingiz hozircha bo'sh</h4>
+                        <p class="text-gray-500 text-sm mt-1 max-w-xs">Mazali burger, lavash yoki pitsalardan birini tanlab buyurtma bering!</p>
+                        <button onclick="toggleCart(false)" class="mt-5 bg-brandBlack text-brandYellow font-bold px-6 py-3 rounded-2xl hover:bg-brandDark transition cursor-pointer">
+                            Menyuga o'tish
+                        </button>
+                    </div>
+                `;
+                footer.classList.add("hidden");
+                return;
+            }
+
+            footer.classList.remove("hidden");
+            container.innerHTML = cart.map(item => `
+                <div class="flex items-center gap-3.5 bg-gray-50 p-3 rounded-2xl border border-gray-200">
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-xl object-cover shrink-0">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-black text-sm text-brandBlack truncate">${item.name}</h4>
+                        <span class="text-[11px] font-bold text-gray-500 block">Hajmi: ${item.size}</span>
+                        <span class="text-sm font-black text-brandRed">${formatPrice(item.price * item.qty)}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-white border border-gray-200 rounded-xl p-1">
+                        <button onclick="updateCartItemQty('${item.key}', -1)" class="w-7 h-7 rounded-lg hover:bg-brandYellow font-black text-sm cursor-pointer">-</button>
+                        <span class="w-6 text-center font-black text-xs">${item.qty}</span>
+                        <button onclick="updateCartItemQty('${item.key}', 1)" class="w-7 h-7 rounded-lg hover:bg-brandYellow font-black text-sm cursor-pointer">+</button>
+                    </div>
+                </div>
+            `).join("");
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const deliveryFee = subtotal >= 100000 ? 0 : 15000;
+            const total = subtotal + deliveryFee;
+
+            document.getElementById("cartSubtotal").textContent = formatPrice(subtotal);
+            document.getElementById("cartDelivery").textContent = deliveryFee === 0 ? "BEPUL 🎉" : formatPrice(deliveryFee);
+            document.getElementById("cartTotal").textContent = formatPrice(total);
+        }
+
+        function toggleCart(open) {
+            const overlay = document.getElementById("cartOverlay");
+            const drawer = document.getElementById("cartDrawer");
+            if (open) {
+                overlay.classList.remove("hidden");
+                drawer.classList.remove("translate-x-full");
+            } else {
+                overlay.classList.add("hidden");
+                drawer.classList.add("translate-x-full");
+            }
+        }
+
+        // 6. ORDER SUBMISSION
+        function submitOrder() {
+            const name = document.getElementById("customerName").value.trim() || "Hurmatli mijoz";
+            const phone = document.getElementById("customerPhone").value.trim();
+            const address = document.getElementById("customerAddress").value.trim();
+
+            if (!phone || !address) {
+                showToast("Iltimos, telefon raqamingiz va manzilni kiriting!", true);
+                return;
+            }
+
+            const randomOrderNum = "#TF-" + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById("confirmName").textContent = name;
+            document.getElementById("orderNumber").textContent = randomOrderNum;
+
+            // Clear cart
+            cart = [];
+            updateCartUI();
+            toggleCart(false);
+
+            const successModal = document.getElementById("orderSuccessModal");
+            successModal.classList.remove("hidden");
+            successModal.classList.add("flex");
+        }
+
+        function closeOrderSuccess() {
+            const successModal = document.getElementById("orderSuccessModal");
+            successModal.classList.add("hidden");
+            successModal.classList.remove("flex");
+        }
+
+        // 7. TOAST NOTIFICATION SYSTEM (No alert() used!)
+        function showToast(message, isError = false) {
+            const container = document.getElementById("toastContainer");
+            const toast = document.createElement("div");
+            toast.className = `${isError ? 'bg-brandRed text-white' : 'bg-brandBlack text-brandYellow border-2 border-brandYellow'} px-5 py-3 rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-2.5 animate-card-enter`;
+            toast.innerHTML = `
+                <i class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(10px)";
+                toast.style.transition = "all 0.3s ease";
+                setTimeout(() => toast.remove(), 300);
+            }, 2600);
+        }
+
+        // 8. MOBILE NAV & LIVE SEARCH LISTENERS
+        function toggleMobileNav() {
+            document.getElementById("mobileNav").classList.toggle("hidden");
+        }
+
+        document.getElementById("searchInput").addEventListener("input", (e) => {
+            searchQuery = e.target.value;
+            renderMenu();
+        });
+
+        document.getElementById("mobileSearchInput").addEventListener("input", (e) => {
+            searchQuery = e.target.value;
+            renderMenu();
+        });
+
+        // 9. PROMO COUNTDOWN TIMER
+        function startCountdown() {
+            let totalSeconds = 4 * 3600 + 45 * 60 + 19;
+            setInterval(() => {
+                if (totalSeconds <= 0) totalSeconds = 5 * 3600;
+                totalSeconds--;
+                const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+                const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+                const secs = String(totalSeconds % 60).padStart(2, '0');
+
+                document.getElementById("timerHours").textContent = hrs;
+                document.getElementById("timerMinutes").textContent = mins;
+                document.getElementById("timerSeconds").textContent = secs;
+            }, 1000);
+        }
+
+        // INITIALIZE APP
+        window.addEventListener("DOMContentLoaded", () => {
+            renderCategories();
+            renderMenu();
+            updateCartUI();
+            startCountdown();
+        });
+    </script>
+</body>
+</html>
